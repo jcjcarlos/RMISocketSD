@@ -14,10 +14,9 @@ public class ServerBank {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void start() throws IOException {
-		while (true) {
-			new ClientBank(serverSocket.accept()).start();
-		}
+		Socket clientSocket = serverSocket.accept(); 
+		//PrintStream ps = ;
 	}
 }

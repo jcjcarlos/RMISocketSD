@@ -20,9 +20,7 @@ public class ClientBank extends Thread {
 			DataInputStream is = new DataInputStream(this.client.getInputStream());
 			PrintStream os = new PrintStream(this.client.getOutputStream());
 			while (true) {
-				os.println("Bem-vindo ao banco Central!\nSelecione uma das opcoes:");
-				os.flush();
-				os.println();
+				os.println("Bem-vindo ao banco Central");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

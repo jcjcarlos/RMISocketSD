@@ -18,6 +18,8 @@ public class ServerBank {
 	public void start() throws IOException {
 		while (true) {
 			new ClientBank(serverSocket.accept()).start();
+			;
+
 		}
 	}
 }

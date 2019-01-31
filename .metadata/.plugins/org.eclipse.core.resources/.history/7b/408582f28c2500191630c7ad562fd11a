@@ -1,6 +1,5 @@
 package network;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -14,10 +13,9 @@ public class ServerBank {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void start() throws IOException {
-		while (true) {
-			new ClientBank(serverSocket.accept()).start();
-		}
+		Socket clientSocket = serverSocket.accept(); 
+		//PrintStream ps = ;
 	}
 }
