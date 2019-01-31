@@ -1,0 +1,26 @@
+package business;
+
+import java.util.Random;
+
+public class Count {
+	private int id;
+	private String owner;
+	private double balanceCount;
+	private static String[] names = {"Fulano","Cicrano","Beltrano"};
+	
+	public Count() {
+		Random random = new Random();
+		this.id = random.nextInt(1000000);
+		this.owner = names[random.nextInt(3)];
+		this.balanceCount = 0.0;
+	}
+	
+	public Count(String name) {
+		Random random = new Random();
+	}
+	
+	private void generateId() {
+		Random random = new Random();
+		this.id = random.nextInt(1000000);
+	}
+}

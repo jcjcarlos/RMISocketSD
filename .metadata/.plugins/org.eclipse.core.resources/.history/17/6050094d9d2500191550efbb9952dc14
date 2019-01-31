@@ -1,0 +1,26 @@
+package business;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Bank {
+	private String name;
+	private List<Count> counts;
+	
+	public Bank() {
+		this.name = "Central";
+		this.counts = new ArrayList<Count>();
+	}
+	
+	public void createCount(String name) {
+		this.counts.add(new Count(name));
+	}
+	
+	public void deleteCount(String id) {
+		for (Count count:this.counts) {
+			if(count.getId() == id) {
+				this.counts.remove(count);
+			}
+		}
+	}
+}

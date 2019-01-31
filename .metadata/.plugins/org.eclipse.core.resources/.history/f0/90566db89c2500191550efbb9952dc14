@@ -1,0 +1,6 @@
+package business;
+
+public class Bank {
+	private String name;
+	List<Count> counts;
+}
