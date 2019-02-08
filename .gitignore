@@ -1,4 +1,8 @@
 /bin/
-/.classpath/
+.classpath
+.project
 /.project/
 /.settings/
+/.metadata/
+/.recommenders/
+

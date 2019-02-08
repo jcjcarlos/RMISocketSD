@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import business.Bank;
+
 public class ServerBank {
 	private ServerSocket serverSocket;
 
@@ -16,8 +18,9 @@ public class ServerBank {
 	}
 
 	public void start() throws IOException {
+		Bank bank = Bank.getInstance();
 		while (true) {
-			new ClientBank(serverSocket.accept()).start();
+			new ClientBank(serverSocket.accept(),bank).start();
 		}
 	}
 }

@@ -4,25 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bank {
+	private static Bank bank = null;
 	private String name;
 	private List<Account> accounts;
 
-	public Bank() {
+	private Bank() {
 		this.name = "Central";
 		this.accounts = new ArrayList<Account>();
 	}
-
-	public void createAccount(String name) {
-		this.accounts.add(new Account(name));
+	
+	public static Bank getInstance() {
+		if(bank == null){
+			bank = new Bank();
+		}
+		return bank;
 	}
 
-	public boolean deleteAccount(int id) {
-		for (Account count : this.accounts)
-			if (count.getId() == id) {
-				this.accounts.remove(count);
-				return true;
-			}
-		return false;
+	public void createAccount(Account account) {
+		this.accounts.add(account);
+	}
+
+	public boolean deleteAccount(Account account) {
+		return this.accounts.remove(account);
 	}
 
 	public List<Account> findAccountByName(String name) {
