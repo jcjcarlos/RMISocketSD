@@ -1,8 +1,2 @@
-/bin/
-.classpath
-.project
-/.project/
-/.settings/
-/.metadata/
-/.recommenders/
-
+!src/
+!.gitignore
