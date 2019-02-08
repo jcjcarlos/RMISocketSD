@@ -48,7 +48,7 @@ public class ClientBank extends Thread {
 
 	private void createAccount() {
 		this.os.println("Digite o nome da conta:");
-		String nameAccount = this.is.
+		//String nameAccount = this.is.
 	}
 
 }
