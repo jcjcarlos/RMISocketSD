@@ -17,10 +17,16 @@ public class ServerBank {
 		}
 	}
 
-	public void start() throws IOException {
+	public void start() {
 		Bank bank = Bank.getInstance();
+		
 		while (true) {
-			new ClientBank(serverSocket.accept(),bank).start();
+			try {
+				new ClientBank(serverSocket.accept(),bank).start();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
