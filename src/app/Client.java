@@ -28,11 +28,12 @@ public class Client {
 			String opt = new String(message);
 			System.out.println(opt);
 			
-			while(opt != "exit") {
+			while(!opt.equals("exit")) {
 				os.println(sin.readLine());
 				opt = is.readLine();
 				System.out.println("Resposta: "+opt);
-				System.out.println(opt.length());
+				if(opt.equals("exit"))
+					System.out.println("Exit selecionado");
 			}
 			
 			System.out.println("String null detectada");
