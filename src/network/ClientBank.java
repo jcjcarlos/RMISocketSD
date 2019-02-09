@@ -32,9 +32,11 @@ public class ClientBank extends Thread {
 				this.showMenu();
 				int opt = Integer.parseInt(this.is.readLine());
 				switch (opt) {
-				case 1:
+				case 0:
+					this.createAccount();
 					break;
 				}
+				break;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -43,22 +45,19 @@ public class ClientBank extends Thread {
 	}
 
 	private void showMenu() throws IOException {
-		this.os.println("Bem-vindo ao banco Central!\nSelecione uma das opcoes:");
-		this.os.flush();
-		this.os.println("1 - Criar Conta:");
-		this.os.flush();
-		this.os.println("2 - Depositar");
-		this.os.flush();
-		this.os.println("3 - Sacar");
-		this.os.flush();
-		this.os.println("4 - Ver Saldo");
+		String message = "Bem-vindo ao banco Central!\nSelecione uma das opcoes:\n"
+				+ "1 - Criar Conta\n2 - Depositar\n3 - Sacar\n4 - Ver Saldo\n";
+		this.os.print(message);
 		this.os.flush();
 	}
 
 	private void createAccount() throws IOException {
 		this.os.println("Digite o nome da conta:");
+		this.os.flush();
 		String name = this.is.readLine();
 		System.out.println(name);
+		this.os.println("exit");
+		this.os.flush();
 	}
 
 }
