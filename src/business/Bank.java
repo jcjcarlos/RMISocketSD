@@ -15,27 +15,28 @@ public class Bank {
 		this.accounts = new ArrayList<Account>();
 		this.random = new Random();
 	}
-	
+
 	public static Bank getInstance() {
-		if(bank == null){
+		if (bank == null) {
 			bank = new Bank();
 		}
 		return bank;
 	}
 
-	public void createAccount(Account account) {
-		account.setId(random.nextInt(1000) + 1);
-		this.accounts.add(account);
-	}
-	
-	public boolean depositAccount(int id, double value) {
-		Account accountFound = this.findAccountById(id);
-		if (accountFound != null)
-			return accountFound.creditAccount(value);
+	public boolean createAccount(Account account) {
+		if (this.accounts.size() <= 10) {
+			account.setId(random.nextInt(10) + 1);
+			this.accounts.add(account);
+			return true;
+		}
 		return false;
+		
 	}
-	
-	public boolean takeOutAccount(int id, double value, int password) {
+
+	public boolean changeAccountBalance(Account account, double value) {
+		Account accountFound = this.findAccountById(account);
+		if (accountFound != null)
+			return accountFound.changeBalance(value);
 		return false;
 	}
 
@@ -50,10 +51,10 @@ public class Bank {
 				accounts.add(count);
 		return accounts;
 	}
-	
-	public Account findAccountById(int id){
-		for(Account account: accounts)
-			if (account.getId() == id)
+
+	public Account findAccountById(Account account) {
+		for (Account foundAccount : accounts)
+			if (foundAccount.getId() == account.getId())
 				return account;
 		return null;
 	}

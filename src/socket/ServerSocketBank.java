@@ -1,4 +1,4 @@
-package network;
+package socket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,10 +6,10 @@ import java.net.Socket;
 
 import business.Bank;
 
-public class ServerBank {
+public class ServerSocketBank {
 	private ServerSocket serverSocket;
 
-	public ServerBank() {
+	public ServerSocketBank() {
 		try {
 			this.serverSocket = new ServerSocket(5456);
 		} catch (IOException e) {
@@ -22,7 +22,7 @@ public class ServerBank {
 		
 		while (true) {
 			try {
-				new ClientBank(serverSocket.accept(),bank).start();
+				new ClientThread(serverSocket.accept(),bank).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

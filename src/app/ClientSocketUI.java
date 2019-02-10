@@ -12,16 +12,20 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import business.Account;
+import interfaces.IClientRemote;
+import interfaces.IClientUI;
 
-public class Client {
+public class ClientSocketUI extends IClientUI {
 	// Classe asbtrata para ClientSocket, ClientRMI e ClienteDLL
-	static BufferedReader is;// Leitura de informações do servidor
-	static BufferedReader sin;// Leitura do teclado
-	static PrintWriter os;// Escrita de informações para o servidor
-	static ObjectOutputStream oos;// Escrita de uma conta criada
-	static ObjectInputStream ois;// Leitura de contas alteradas/deletadas
+	// Os atributos refere-se a ClientSocket
+	private BufferedReader is;// Leitura de informações do servidor
+	private BufferedReader sin;// Leitura do teclado
+	private PrintWriter os;// Escrita de informações para o servidor
+	private ObjectOutputStream oos;// Escrita de uma conta criada
+	private ObjectInputStream ois;// Leitura de contas alteradas/deletadas
+	private Account account; // Conta em operacao
 
-	public static void main(String[] args) {
+	public ClientSocketUI() {
 		// TODO Auto-generated method stub
 		try {
 			Socket client = new Socket("localhost", 5456);
@@ -30,23 +34,28 @@ public class Client {
 			os = new PrintWriter(client.getOutputStream(), true);
 			oos = new ObjectOutputStream(client.getOutputStream());
 
-			showMenu();
-			switch (Integer.parseInt(sin.readLine())) {
-			case 1:
-				oos.writeObject(createAccount());
-				break;
-			case 2:
-				break;
-			}
+			System.out.println("Bem-vindo ao banco Central!\\n");
+			while (true) {
+				this.showMenu();
+				switch (Integer.parseInt(sin.readLine())) {
+				case 1:
+					oos.writeObject(createAccount());
+					oos.flush();
+					break;
+				case 2:
+					
+					break;
+				}
 
-			/*
-			 * char[] message = new char[1000]; is.read(message); String opt = new
-			 * String(message); System.out.println(opt);
-			 * 
-			 * 
-			 * while (!opt.equals("exit")) { os.println(sin.readLine()); opt =
-			 * is.readLine(); System.out.println("Resposta: " + opt);
-			 */
+				/*
+				 * char[] message = new char[1000]; is.read(message); String opt = new
+				 * String(message); System.out.println(opt);
+				 * 
+				 * 
+				 * while (!opt.equals("exit")) { os.println(sin.readLine()); opt =
+				 * is.readLine(); System.out.println("Resposta: " + opt);
+				 */
+			}
 		} catch (UnknownHostException e) {
 
 			// TODO Auto-generated catch block
@@ -63,14 +72,15 @@ public class Client {
 	 * reaproveitados na comunicação via Socket, RMI ou DLL
 	 */
 
-	private static Account createAccount() throws IOException {
+	private Account createAccount() throws IOException {
 		System.out.println("Digite o nome da conta:");
 		String name = sin.readLine();
 		System.out.println("Conta criada com sucesso!");
 		return new Account(name);
 	}
 
-	private static Account findAccountById() throws IOException {
+	@Override
+	protected Account findAccountById() throws IOException {
 		System.out.println("Digite o ID da conta");
 		return findAccountById(Integer.parseInt(sin.readLine()));
 	}
@@ -80,7 +90,8 @@ public class Client {
 	 * acreditado/debitado o valor,
 	 */
 
-	private static Account findAccountById(int id) throws IOException {
+	@Override
+	protected Account findAccountById(int id) throws IOException {
 		os.println(id);
 		try {
 			return (Account) ois.readObject();
@@ -91,7 +102,7 @@ public class Client {
 		}
 	}
 
-	private static Account reportAccountAmount() throws IOException {
+	private Account changeAccountBalance() throws IOException {
 		Account findAccount = findAccountById();
 		if (findAccount != null) {
 			System.out.println("Digite o valor:");
@@ -106,13 +117,12 @@ public class Client {
 		return null;
 	}
 
-	private static Account deleteAccount() throws IOException {
+	private Account deleteAccount() throws IOException {
 		return findAccountById();
 	}
 
-	private static void showMenu() throws IOException {
-		String message = "Bem-vindo ao banco Central!\nSelecione uma das opcoes:\n"
-				+ "1 - Criar Conta\n2 - Depositar\n3 - Sacar\n4 - Ver Saldo\n";
+	private void showMenu() {
+		String message = "Selecione uma das opcoes:\n" + "1 - Criar Conta\n2 - Depositar\n3 - Sacar\n4 - Ver Saldo\n";
 		System.out.println(message);
 	}
 

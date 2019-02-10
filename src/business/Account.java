@@ -29,16 +29,11 @@ public class Account {
 		return this.owner;
 	}
 
-	public boolean creditAccount(double value) {
-		this.balanceAccount += value;
+	public boolean changeBalance(double value) {
+		if (this.balanceAccount + value < 0.0)
+			return false;
+		this.balanceAccount+=value;
 		return true;
 	}
 
-	public boolean debitAccount(double value) {
-		if (this.balanceAccount >= value) {
-			this.balanceAccount -= value;
-			return true;
-		}
-		return false;
-	}
 }
