@@ -1,6 +1,7 @@
 package socket;
 
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 
 import business.Account;
 import business.Bank;
@@ -18,53 +19,66 @@ import java.io.PrintWriter;
 public class ClientSocketThread extends Thread {
 
 	private Socket client;
-	private BufferedReader is;
-	private PrintWriter os;
+	private DataInputStream is;
+	private DataOutputStream os;
 	private Bank bank;
 
-	public ClientSocketThread(Socket client, Bank bank) throws IOException {
+	public ClientSocketThread(Socket client, Bank bank, Semaphore semaphore) throws IOException {
 		this.client = client;
 		this.bank = bank;
-		this.is = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
-		this.os = new PrintWriter(this.client.getOutputStream(), true);
+		this.is = new DataInputStream(this.client.getInputStream());
+		// this.pos = new PrintWriter(this.client.getOutputStream());
+		this.os = new DataOutputStream(this.client.getOutputStream());
+
 	}
 
 	public void run() {
-
-		while (true) {
-
+		int opt = 0;
+		do {
 			try {
-				/*
-				 * 1 - Identificar opção
-				 */
-				int opt;
-				opt = this.is.read();
-				int idAccount = this.is.read();
 
+				opt = this.is.readInt();
+				if (opt == 0)
+					break;
+
+				int idAccount = this.is.readInt();
 				switch (opt) {
 				case 1:
-					this.os.println(this.bank.addAccount(idAccount));
+					this.os.writeBoolean(this.bank.addAccount(idAccount));
+					this.os.flush();
 					break;
 				case 2:
-					this.os.println(
-							this.bank.changeAccountBalance(idAccount, Double.parseDouble(this.is.readLine())));
-					break;
 				case 3:
-					this.os.println(
-							this.bank.changeAccountBalance(idAccount, -Double.parseDouble(this.is.readLine())));
+					this.os.writeBoolean(this.bank.changeAccountBalance(idAccount, this.is.readDouble()));
+					this.os.flush();
 					break;
 				case 4:
-					this.os.println(this.bank.removeAccount(idAccount));
+					this.os.writeBoolean(this.bank.removeAccount(idAccount));
 					break;
 				case 5:
-					this.os.println(this.bank.findAccountById(idAccount));
+					String infoAccount = String.valueOf(this.bank.findAccountById(idAccount));
+					System.out.println(infoAccount);
+					this.os.writeInt(infoAccount.length());
+					this.os.flush();
+					char[] charInfoAccount = new char[infoAccount.length()];
+					this.os.writeChars(infoAccount);
+					this.os.flush();
+
 				}
 			} catch (NumberFormatException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		}
+		} while (opt != 0 || !this.client.isClosed());
+
+	}
+
+	private void closeThread() throws IOException {
+		this.is.close();
+		this.os.close();
+		this.client.close();
+
 	}
 
 }

@@ -10,6 +10,9 @@ public class Bank {
 
 	private Bank() {
 		this.accounts = new ArrayList<Account>();
+		this.accounts.add(new Account(1));
+		this.accounts.get(0).changeBalance(100);
+
 	}
 
 	public static Bank getInstance() {
@@ -31,11 +34,15 @@ public class Bank {
 		Account accountFound = this.findAccountById(id);
 		if (accountFound != null)
 			return accountFound.changeBalance(value);
+
 		return false;
 	}
 
 	public boolean removeAccount(int id) {
-		return this.accounts.remove(id) != null;
+		Account account = this.findAccountById(id);
+		System.out.println("Conta encontrada para remover:\n"+account);
+		return this.accounts.remove(account);
+		
 	}
 
 	public List<Account> findAccountByName(String name) {

@@ -17,17 +17,17 @@ import interfaces.IAccountDAO;
 public class AccountSocketDAO implements IAccountDAO {
 	// Classe asbtrata para ClientSocket, ClientRMI e ClienteDLL
 	// Os atributos refere-se a ClientSocket
-	private BufferedReader is;// Leitura de informações do servidor
-	private PrintWriter os;// Escrita de informações para o servidor
-	private ObjectOutputStream oos;// Escrita de uma conta criada
-	private ObjectInputStream ois;// Leitura de contas alteradas/deletadas
+	private DataInputStream is;// Leitura de informações do servidor
+	private DataOutputStream os;// Escrita de informações para o servidor
+	private Socket client;
 
 	public AccountSocketDAO() {
 		// TODO Auto-generated method stub
 		try {
-			Socket client = new Socket("localhost", 5456);
-			is = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			os = new PrintWriter(client.getOutputStream(), true);
+			client = new Socket("localhost", 5456);
+			is = new DataInputStream(client.getInputStream());
+			os = new DataOutputStream(client.getOutputStream());
+			// bin = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
 			/*
 			 * O menu de opções esta delegado para a classe ClientUI A classe
@@ -39,8 +39,8 @@ public class AccountSocketDAO implements IAccountDAO {
 			 * String(message); System.out.println(opt);
 			 * 
 			 * 
-			 * while (!opt.equals("exit")) { os.println(sin.readLine()); opt =
-			 * is.readLine(); System.out.println("Resposta: " + opt);
+			 * while (!opt.equals("exit")) { os.write(sin.readLine()); opt = is.readLine();
+			 * System.out.println("Resposta: " + opt);
 			 */
 
 		} catch (UnknownHostException e) {
@@ -59,14 +59,14 @@ public class AccountSocketDAO implements IAccountDAO {
 	 * acreditado/debitado o valor,
 	 */
 
-
-
 	@Override
 	public boolean save(int id) {
-		this.os.println(1);
 		try {
-			this.os.println(id);
-			return Boolean.parseBoolean(this.is.readLine());
+			this.os.writeInt(1);
+			this.os.flush();
+			this.os.writeInt(id);
+			this.os.flush();
+			return this.is.readBoolean();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -77,14 +77,12 @@ public class AccountSocketDAO implements IAccountDAO {
 	@Override
 	public boolean changeAccount(int id, double value) {
 		// TODO Auto-generated method stub
-		if (value > 0.0)
-			this.os.println(2);
-		else
-			this.os.println(3);
+
 		try {
-			this.os.println(id);
-			this.os.println(value);
-			return Boolean.parseBoolean(this.is.readLine());
+			this.os.writeInt(2);
+			this.os.writeInt(id);
+			this.os.writeDouble(value);
+			return this.is.readBoolean();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,28 +93,48 @@ public class AccountSocketDAO implements IAccountDAO {
 	@Override
 	public boolean removeAccount(int id) {
 		// TODO Auto-generated method stub
-		this.os.println(4);
-		this.os.println(id);
 		try {
-			return Boolean.parseBoolean(this.is.readLine());
+			this.os.writeInt(4);
+			this.os.writeInt(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			return this.is.readBoolean();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
-	
+
 	@Override
-	public Account findAccountById(int id) throws IOException {
-		this.os.println(5);
-		this.os.println(id);
+	public String findAccountById(int id) throws IOException {
+		this.os.writeInt(5);
+		this.os.writeInt(id);
+		int length = this.is.readInt();
+		System.out.println(length);
+		char[] infoAccount = new char[length];
+		for (int i = 0; i < length; i++)
+			infoAccount[i] = this.is.readChar();
+		return new String(infoAccount);
+
+	}
+
+	@Override
+	public void close() {
 		try {
-			return (Account) ois.readObject();
-		} catch (ClassNotFoundException e) {
+			this.os.writeInt(0);
+			this.is.close();
+			this.os.close();
+			this.client.close();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
 		}
+
 	}
 
 }

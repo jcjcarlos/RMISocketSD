@@ -1,29 +1,40 @@
 package ui;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 import business.Account;
 import interfaces.IAccountDAO;
 
 public class ClientUI {// Classe base para as implementações do usuário (lado client)
 
-	private BufferedReader sin;
+	private Scanner sin;
 	private IAccountDAO accountDAO; // Classe abstrata para as operações remotas de Account
 
 	public ClientUI(IAccountDAO accountDAO) {
-		this.sin = new BufferedReader(new InputStreamReader(System.in));
+		this.sin = new Scanner(System.in);
 		this.accountDAO = accountDAO;
 	}
 
 	public void execute() throws IOException {
-		while (true) {
+		int opt;
+		int idAccount;
+
+		do {
 			this.showMenu();
-			int opt = Integer.parseInt(sin.readLine());
+			opt = sin.nextInt();
+			if (opt == 0) {
+				System.out.println("Saindo da aplicação");
+				break;
+			}
 			boolean resultOperation = false;
-			int idAccount = this.getIdFromUser();
+			idAccount = this.getIdFromUser();
 			switch (opt) {
+			case 0:
+				break;
 			case 1:
 				resultOperation = this.accountDAO.save(idAccount);
 				break;
@@ -41,19 +52,21 @@ public class ClientUI {// Classe base para as implementações do usuário (lado
 			}
 			if (resultOperation) {
 				System.out.println("Operaçao realizada com sucesso");
-				System.out.println(this.accountDAO.findAccountById(idAccount));
+				System.out.println("\n" + this.accountDAO.findAccountById(idAccount) + "\n");
+			} else {
+				System.out.println("Não foi possivel realizar a operação");
 			}
-		}
+		} while (opt != 0);
 	}
 
 	private double getValueFromUser() throws IOException {
 		System.out.println("Digite o valor:");
-		return Double.parseDouble(this.sin.readLine());
+		return this.sin.nextDouble();
 	}
 
 	private int getIdFromUser() throws IOException {
 		System.out.println("Digite o Id da conta");
-		return Integer.parseInt(this.sin.readLine());
+		return this.sin.nextInt();
 
 	}
 
@@ -82,7 +95,8 @@ public class ClientUI {// Classe base para as implementações do usuário (lado
 	 */
 
 	protected void showMenu() {
-		String message = "Selecione uma das opcoes:\n" + "1 - Criar Conta\n2 - Depositar\n3 - Sacar\n4 - Ver Saldo\n";
+		String message = "\n\nSelecione uma das opcoes:\n" + "1 - Criar Conta\n2 - Depositar\n"
+				+ "3 - Sacar\n4 - Cancelar Conta\n0 - Sair";
 		System.out.println(message);
 	}
 }
