@@ -22,7 +22,7 @@ public class ServerSocketBank {
 		
 		while (true) {
 			try {
-				new ClientThread(serverSocket.accept(),bank).start();
+				new ClientSocketThread(serverSocket.accept(),bank).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

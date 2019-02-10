@@ -6,14 +6,10 @@ import java.util.Random;
 
 public class Bank {
 	private static Bank bank = null;
-	private Random random;
-	private String name;
 	private List<Account> accounts;
 
 	private Bank() {
-		this.name = "Central";
 		this.accounts = new ArrayList<Account>();
-		this.random = new Random();
 	}
 
 	public static Bank getInstance() {
@@ -23,25 +19,23 @@ public class Bank {
 		return bank;
 	}
 
-	public boolean createAccount(Account account) {
+	public boolean addAccount(int id) {
 		if (this.accounts.size() <= 10) {
-			account.setId(random.nextInt(10) + 1);
-			this.accounts.add(account);
-			return true;
+			return this.accounts.add(new Account(id));
 		}
 		return false;
-		
+
 	}
 
-	public boolean changeAccountBalance(Account account, double value) {
-		Account accountFound = this.findAccountById(account);
+	public boolean changeAccountBalance(int id, double value) {
+		Account accountFound = this.findAccountById(id);
 		if (accountFound != null)
 			return accountFound.changeBalance(value);
 		return false;
 	}
 
-	public boolean deleteAccount(Account account) {
-		return this.accounts.remove(account);
+	public boolean removeAccount(int id) {
+		return this.accounts.remove(id) != null;
 	}
 
 	public List<Account> findAccountByName(String name) {
@@ -52,10 +46,10 @@ public class Bank {
 		return accounts;
 	}
 
-	public Account findAccountById(Account account) {
+	public Account findAccountById(int id) {
 		for (Account foundAccount : accounts)
-			if (foundAccount.getId() == account.getId())
-				return account;
+			if (foundAccount.getId() == id)
+				return foundAccount;
 		return null;
 	}
 }

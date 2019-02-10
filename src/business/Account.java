@@ -8,13 +8,9 @@ public class Account {
 	private double balanceAccount = 0.0;
 	private static String[] names = { "Fulano", "Cicrano", "Beltrano" };
 
-	public Account() {
+	public Account(int id) {
+		this.id = id;
 		this.owner = names[new Random().nextInt(3)];
-		this.balanceAccount = 0.0;
-	}
-
-	public Account(String name) {
-		this.owner = name;
 	}
 
 	public void setId(int id) {
@@ -34,6 +30,10 @@ public class Account {
 			return false;
 		this.balanceAccount+=value;
 		return true;
+	}
+	
+	public String toString() {
+		return "Informações da conta:\nId: "+this.id+"\nNome: "+this.owner+"\nSaldo: "+this.balanceAccount+"\n";
 	}
 
 }
