@@ -10,8 +10,9 @@ public class Bank {
 
 	private Bank() {
 		this.accounts = new ArrayList<Account>();
-		this.accounts.add(new Account(1));
-		this.accounts.get(0).changeBalance(100);
+		/*
+		 * this.accounts.add(new Account(1)); this.accounts.get(0).changeBalance(100);
+		 */
 
 	}
 
@@ -24,7 +25,8 @@ public class Bank {
 
 	public boolean addAccount(int id) {
 		if (this.accounts.size() <= 10) {
-			return this.accounts.add(new Account(id));
+			if (this.findAccountById(id) == null)
+				return this.accounts.add(new Account(id));
 		}
 		return false;
 
@@ -40,9 +42,9 @@ public class Bank {
 
 	public boolean removeAccount(int id) {
 		Account account = this.findAccountById(id);
-		System.out.println("Conta encontrada para remover:\n"+account);
+		System.out.println("Conta encontrada para remover:\n" + account);
 		return this.accounts.remove(account);
-		
+
 	}
 
 	public List<Account> findAccountByName(String name) {

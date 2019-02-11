@@ -1,4 +1,4 @@
-package dao;
+package clientRemote;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -12,19 +12,19 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import business.Account;
-import interfaces.IAccountDAO;
+import interfaces.IRemoteBank;
 
-public class AccountSocketDAO implements IAccountDAO {
+public class SocketClientBank implements IRemoteBank {
 	// Classe asbtrata para ClientSocket, ClientRMI e ClienteDLL
 	// Os atributos refere-se a ClientSocket
 	private DataInputStream is;// Leitura de informações do servidor
 	private DataOutputStream os;// Escrita de informações para o servidor
 	private Socket client;
 
-	public AccountSocketDAO() {
+	public SocketClientBank() {
 		// TODO Auto-generated method stub
 		try {
-			client = new Socket("localhost", 5456);
+			client = new Socket("localhost", 9000);
 			is = new DataInputStream(client.getInputStream());
 			os = new DataOutputStream(client.getOutputStream());
 			// bin = new BufferedReader(new InputStreamReader(client.getInputStream()));

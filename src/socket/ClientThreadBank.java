@@ -5,7 +5,7 @@ import java.util.concurrent.Semaphore;
 
 import business.Account;
 import business.Bank;
-import interfaces.IAccountDAO;
+import interfaces.IRemoteBank;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,14 +16,14 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 
-public class ClientSocketThread extends Thread {
+public class ClientThreadBank extends Thread {
 
 	private Socket client;
 	private DataInputStream is;
 	private DataOutputStream os;
 	private Bank bank;
 
-	public ClientSocketThread(Socket client, Bank bank, Semaphore semaphore) throws IOException {
+	public ClientThreadBank(Socket client, Bank bank, Semaphore semaphore) throws IOException {
 		this.client = client;
 		this.bank = bank;
 		this.is = new DataInputStream(this.client.getInputStream());

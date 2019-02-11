@@ -7,14 +7,14 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import business.Account;
-import interfaces.IAccountDAO;
+import interfaces.IRemoteBank;
 
 public class ClientUI {// Classe base para as implementações do usuário (lado client)
 
 	private Scanner sin;
-	private IAccountDAO accountDAO; // Classe abstrata para as operações remotas de Account
+	private IRemoteBank accountDAO; // Classe abstrata para as operações remotas de Account
 
-	public ClientUI(IAccountDAO accountDAO) {
+	public ClientUI(IRemoteBank accountDAO) {
 		this.sin = new Scanner(System.in);
 		this.accountDAO = accountDAO;
 	}
@@ -52,7 +52,7 @@ public class ClientUI {// Classe base para as implementações do usuário (lado
 			}
 			if (resultOperation) {
 				System.out.println("Operaçao realizada com sucesso");
-				System.out.println("\n" + this.accountDAO.findAccountById(idAccount) + "\n");
+				System.out.println("\n" + String.valueOf(this.accountDAO.findAccountById(idAccount)) + "\n");
 			} else {
 				System.out.println("Não foi possivel realizar a operação");
 			}

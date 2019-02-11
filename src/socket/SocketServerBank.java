@@ -7,25 +7,26 @@ import java.util.concurrent.Semaphore;
 
 import business.Bank;
 
-public class ServerSocketBank {
+public class SocketServerBank {
 	private ServerSocket serverSocket;
 	private Semaphore semaphore;
+	private Bank bank;
 
-	public ServerSocketBank() {
+	public SocketServerBank(Bank bank, Semaphore semaphore) {
 		try {
-			this.serverSocket = new ServerSocket(5456);
-			this.semaphore = new Semaphore();
+			this.serverSocket = new ServerSocket(9000);
+			this.semaphore = semaphore;
+			this.bank = bank;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void start() {
-		Bank bank = Bank.getInstance();
 
 		while (true) {
 			try {
-				new ClientSocketThread(serverSocket.accept(), bank).start();
+				new ClientThreadBank(serverSocket.accept(), this.bank, this.semaphore).start();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
