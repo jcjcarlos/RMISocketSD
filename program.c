@@ -1,13 +1,4 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
-
-typedef struct Account{
-    int id;
-    //char *name;
-    double balance;
-} Account;
-
+#include<program.h>
 int numAccounts = 0;
 //char names[3][8] = {"Fulano", "Cicrano", "Beltrano"};
 
